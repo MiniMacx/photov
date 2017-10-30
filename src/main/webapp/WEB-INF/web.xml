@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://java.sun.com/xml/ns/javaee"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+         id="WebApp_ID" version="3.0">
+  <display-name>Archetype Created Web Application</display-name>
+
+
+  <filter>
+    <filter-name>RespFilter</filter-name>
+    <filter-class>org.tustcs.photov.utils.RespFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>RespFilter</filter-name>
+    <url-pattern>*</url-pattern>
+  </filter-mapping>
+
+  <filter>
+    <filter-name>encodingFilter</filter-name>
+    <filter-class>org.tustcs.photov.utils.EncodeFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>encodingFilter</filter-name>
+    <url-pattern>/api/*</url-pattern>
+    <dispatcher>REQUEST</dispatcher> <!-- 没有配置dispatcher就是默认request方式的 -->
+    <dispatcher>FORWARD</dispatcher>
+    <dispatcher>ERROR</dispatcher>
+    <dispatcher>INCLUDE</dispatcher>
+  </filter-mapping>
+
+  <servlet>
+    <servlet-name>weixin</servlet-name>
+    <servlet-class>org.tustcs.photov.service.WxService</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>weixin</servlet-name>
+    <url-pattern>/weixin</url-pattern>
+  </servlet-mapping>
+
+
+  <filter>
+    <filter-name>tokenfilter</filter-name>
+    <filter-class>org.tustcs.photov.utils.TokenFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>tokenfilter</filter-name>
+    <url-pattern>/api/user/showUser</url-pattern>
+    <url-pattern>/api/admin/*</url-pattern>
+    <url-pattern>/api/question/*</url-pattern>
+
+  </filter-mapping>
+
+
+
+
+  <!-- 加载spring容器 -->
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>classpath:spring/spring-*.xml</param-value>
+  </context-param>
+  <!-- Spring监听器 -->
+  <listener>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>
+
+  <servlet>
+    <servlet-name>photov</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <!-- contextConfigLocation不是必须的， 如果不配置contextConfigLocation，
+     springmvc的配置文件默认在：WEB-INF/servlet的name+"-servlet.xml" -->
+    <init-param>
+      <param-name>contextConfigLocation</param-name>
+      <param-value>classpath:spring/spring-web.xml</param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>photov</servlet-name>
+    <url-pattern>/api/*</url-pattern>
+
+  </servlet-mapping>
+
+
+  <servlet>
+    <servlet-name>WechatServlet</servlet-name>
+    <servlet-class>org.tustcs.photov.servlet.WechatServlet</servlet-class>
+    <init-param>
+      <param-name>appid</param-name>
+      <param-value>wx73acef9f7e4b116b</param-value>
+    </init-param>
+    <init-param>
+      <param-name>appsecret</param-name>
+      <param-value>674dad87b5a3513115973ce5ec909d9f</param-value>
+    </init-param>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>WechatServlet</servlet-name>
+    <url-pattern>/wechat.do</url-pattern>
+  </servlet-mapping>
+
+
+
+ <servlet>
+    <servlet-name>WxLoginServlet</servlet-name>
+    <servlet-class>org.tustcs.photov.servlet.LoginServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>WxLoginServlet</servlet-name>
+    <url-pattern>/wxlogin</url-pattern>
+  </servlet-mapping>
+
+
+</web-app>

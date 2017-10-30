@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.tustcs.photov.dao.OrderDayMapper" >
+  <resultMap id="BaseResultMap" type="org.tustcs.photov.entity.OrderDay" >
+    <id column="order_id" property="orderId" jdbcType="INTEGER" />
+    <result column="store_id" property="storeId" jdbcType="INTEGER" />
+    <result column="is_expire" property="isExpire" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    order_id, store_id, is_expire
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from order_day
+    where order_id = #{orderId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from order_day
+    where order_id = #{orderId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="org.tustcs.photov.entity.OrderDay" >
+    insert into order_day (order_id, store_id, is_expire
+      )
+    values (#{orderId,jdbcType=INTEGER}, #{storeId,jdbcType=INTEGER}, #{isExpire,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="org.tustcs.photov.entity.OrderDay" >
+    insert into order_day
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="orderId != null" >
+        order_id,
+      </if>
+      <if test="storeId != null" >
+        store_id,
+      </if>
+      <if test="isExpire != null" >
+        is_expire,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orderId != null" >
+        #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="storeId != null" >
+        #{storeId,jdbcType=INTEGER},
+      </if>
+      <if test="isExpire != null" >
+        #{isExpire,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="org.tustcs.photov.entity.OrderDay" >
+    update order_day
+    <set >
+      <if test="storeId != null" >
+        store_id = #{storeId,jdbcType=INTEGER},
+      </if>
+      <if test="isExpire != null" >
+        is_expire = #{isExpire,jdbcType=INTEGER},
+      </if>
+    </set>
+    where order_id = #{orderId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="org.tustcs.photov.entity.OrderDay" >
+    update order_day
+    set store_id = #{storeId,jdbcType=INTEGER},
+      is_expire = #{isExpire,jdbcType=INTEGER}
+    where order_id = #{orderId,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectByStore" resultType="org.tustcs.photov.entity.OrderDay">
+    select *from order_day where store_id=#{storeId}
+    and is_expire=0;
+  </select>
+
+</mapper>
